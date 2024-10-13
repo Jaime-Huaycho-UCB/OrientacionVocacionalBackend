@@ -14,7 +14,7 @@ class Usuario extends Model
     use Authenticatable, Authorizable, HasFactory;
 
     public $timestamps = false;
-    protected $table = 'USUARIO'; // Especificar la tabla si no sigue las convenciones de Laravel
+    protected $table = 'USUARIO';
 
     protected $fillable = [
         'nombres', 'apellidos', 'email', 'contrasena', 'rol'
