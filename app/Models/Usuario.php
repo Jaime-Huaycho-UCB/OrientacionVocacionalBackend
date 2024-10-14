@@ -23,10 +23,5 @@ class Usuario extends Model
     protected $hidden = [
         'contrasena',
     ];
-
-    // Relación con la tabla ROL
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'rol');
-    }
+    
 }

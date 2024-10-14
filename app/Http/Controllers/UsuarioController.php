@@ -7,65 +7,62 @@ use App\Models\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Http\Controllers\RolController;
+use Exception;
+use Symfony\Component\Console\Input\Input;
+use Illuminate\Support\Facades\DB;
+
 
 class UsuarioController extends Controller
 {
     // Registro de usuarios (sign up)
-    public function signup(Request $request)
-    {
-        // Validar los datos de entrada
-        $this->validate($request, [
-            'nombres' => 'required|string|max:200',
-            'apellidos' => 'required|string|max:200',
-            'email' => 'required|string|email|max:100|unique:USUARIO,email',
-            'contrasena' => 'required|string|min:6',
-            'rol_nombre' => 'required|string|exists:ROL,nombre' // Validar que el nombre del rol exista
-        ]);
-
-        // Obtener el ID del rol basado en el nombre proporcionado
-        $rol = Rol::where('nombre', $request->input('rol_nombre'))->first();
-
-        // Crear el usuario
-        $usuario = new Usuario;
-        $usuario->nombres = $request->input('nombres');
-        $usuario->apellidos = $request->input('apellidos');
-        $usuario->email = $request->input('email');
-        $usuario->contrasena = $request->input('contrasena'); // Encriptar la contraseña
-        $usuario->rol = $rol->id; // Guardar el ID del rol, no se ingresa manualmente, solo se relaciona
-        $usuario->save();
-
-        return response()->json([
-            'message' => 'Usuario creado exitosamente!',
-            'usuario' => $usuario->load('rol') // Cargar también el rol asociado
-        ], 201);
-    }
-
-    // Inicio de sesión (login)
-    public function login(Request $request)
-    {
-        // Validar los datos de entrada
-        $this->validate($request, [
-            'email' => 'required|string|email',
-            'contrasena' => 'required|string',
-        ]);
-
-        // Verificar si el usuario existe
-        $usuario = Usuario::where('email', $request->input('email'))->first();
-
-        // Verificar la contraseña
-        if ($usuario &&($request->input('contrasena') == $usuario->contrasena)) {
-            // Generar un token (en un caso real podrías usar JWT)
-            $token = Str::random(60);
-
+    public function ingresarUsuario(Request $request){
+        $rolController = new RolController();
+        $usuario = new Usuario();
+        $rol = $request->input("rol");
+        $email = $request->input("email");
+        $respuesta = UsuarioController::existeUsuario($email);
+        if (!($respuesta["existe"])){
+            $respuesta=$rolController->existeRol($rol);
+            if ($respuesta['salida']){
+                $usuario->nombres = $request->input("nombres");
+                $usuario->apellidos = $request->input("apellidos");
+                $usuario->email = $request->input("email");
+                $usuario->contrasena = $request->input("contrasena");
+                $usuario->rol=$respuesta['id'];
+                try{
+                    $usuario->save();
+                    return response()->json([
+                        "mensaje" => "usuario ingresado exitosamente"
+                    ],200);
+                }catch(Exception $error){
+                    return response()->json([
+                        "Error" => $error
+                    ],500);
+                }
+            }else{
+                return response()->json([
+                    "mensaje" => $respuesta["mensaje"]
+                ],500);
+            }
+        }else{
             return response()->json([
-                'message' => 'Login exitoso!',
-                'usuario' => $usuario->load('rol'), // Cargar también el rol asociado
-                'token' => $token
-            ], 200);
+                "mensaje" => $respuesta["mensaje"]
+            ]);
         }
-
-        return response()->json([
-            'message' => 'Correo o contraseña incorrectos'
-        ], 401);
+    } 
+    
+    public function existeUsuario(string $email){
+        $usuario = new Usuario();
+        $respuesta = DB::table("USUARIO")->where("email","=",$email)->first();
+        if ($respuesta){
+            return [
+                "existe" => true,
+                "mensaje" => "El usuario ingresado ya existe"
+            ];
+        }
+        return [
+            "existe" => false,
+        ];
     }
 }
