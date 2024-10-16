@@ -1,27 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Prueba;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
-class Usuario extends Model
+class Opcion extends Model
 {
     use Authenticatable, Authorizable, HasFactory;
 
     public $timestamps = false;
-    protected $table = 'USUARIO';
+    protected $table = 'OPCION';
 
     protected $fillable = [
-        'nombres', 'apellidos', 'email', 'contrasena', 'rol'
+        'descripcion','inciso','pregunta' 
     ];
-
-    protected $hidden = [
-        'contrasena',
-    ];
-    
 }

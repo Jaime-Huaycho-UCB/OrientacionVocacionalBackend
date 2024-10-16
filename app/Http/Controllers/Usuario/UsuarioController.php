@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Usuario;
 
-use App\Models\Usuario;
-use App\Models\Rol;
+use App\Models\Usuario\Usuario;
+use App\Http\Controllers\Controller;
+use App\Models\Usuario\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Http\Controllers\RolController;
+use App\Http\Controllers\Usuario\RolController;
 use Exception;
 use Symfony\Component\Console\Input\Input;
 use Illuminate\Support\Facades\DB;
