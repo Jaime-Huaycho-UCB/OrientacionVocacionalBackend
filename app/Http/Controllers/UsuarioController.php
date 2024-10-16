@@ -13,9 +13,7 @@ use Symfony\Component\Console\Input\Input;
 use Illuminate\Support\Facades\DB;
 
 
-class UsuarioController extends Controller
-{
-    // Registro de usuarios (sign up)
+class UsuarioController extends Controller{
     public function ingresarUsuario(Request $request){
         $rolController = new RolController();
         $usuario = new Usuario();
