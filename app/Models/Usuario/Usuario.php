@@ -16,6 +16,8 @@ class Usuario extends Model
     public $timestamps = false;
     protected $table = 'USUARIO';
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'nombres', 'apellidos', 'email', 'contrasena', 'rol'
     ];

@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Usuario\RolController;
-use Exception;
-use Symfony\Component\Console\Input\Input;
 use Illuminate\Support\Facades\DB;
 
 
@@ -20,48 +18,38 @@ class UsuarioController extends Controller{
         $usuario = new Usuario();
         $rol = $request->input("rol");
         $email = $request->input("email");
-        $respuesta = UsuarioController::existeUsuario($email);
-        if (!($respuesta["existe"])){
+        if (!($this->existeUsuario($email))){
             $respuesta=$rolController->existeRol($rol);
-            if ($respuesta['salida']){
+            if ($respuesta){
                 $usuario->nombres = $request->input("nombres");
                 $usuario->apellidos = $request->input("apellidos");
                 $usuario->email = $request->input("email");
                 $usuario->contrasena = $request->input("contrasena");
-                $usuario->rol=$respuesta['id'];
-                try{
-                    $usuario->save();
-                    return response()->json([
-                        "mensaje" => "usuario ingresado exitosamente"
-                    ],200);
-                }catch(Exception $error){
-                    return response()->json([
-                        "Error" => $error
-                    ],500);
-                }
+                $usuario->rol=$respuesta->id;
+                $usuario->save();
+                return response()->json([
+                    "mensaje" => "usuario ingresado exitosamente"
+                ],200);
             }else{
                 return response()->json([
-                    "mensaje" => $respuesta["mensaje"]
+                    "mensaje" => "El rol ingresado es invalido"
                 ],500);
             }
         }else{
             return response()->json([
-                "mensaje" => $respuesta["mensaje"]
+                "mensaje" => "El usuario ya existe"
             ]);
         }
     } 
     
     public function existeUsuario(string $email){
-        $usuario = new Usuario();
-        $respuesta = DB::table("USUARIO")->where("email","=",$email)->first();
-        if ($respuesta){
-            return [
-                "existe" => true,
-                "mensaje" => "El usuario ingresado ya existe"
-            ];
+        return Usuario::where('email',$email)->first();
+    }
+
+    public function obtenerUsuarios(){
+        $usuario = Usuario::all();
+        if ($usuario){
+            return response()->json($usuario,200);
         }
-        return [
-            "existe" => false,
-        ];
     }
 }

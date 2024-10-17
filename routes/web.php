@@ -20,4 +20,7 @@ $router->post('/signup', 'UsuarioController@signup');
 $router->post('/login', 'UsuarioController@login');
 $router->get('/roles', 'RolController@index');
 $router->post('/roles', 'RolController@store');
-$router->post('/usuario/crear', 'UsuarioController@ingresarUsuario');
+$router->post('/usuario/crear', 'Usuario\UsuarioController@ingresarUsuario');
+$router->get('/usuarios/obtener', 'Usuario\UsuarioController@obtenerUsuarios');
+
+$router->get("/prueba/obtener/{id}","Prueba\PruebaController@obtenerPrueba");
