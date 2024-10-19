@@ -17,6 +17,7 @@ class PreguntaController extends Controller{
         foreach ($preguntas as $pregunta){
             $opciones = $opcionController->obtenerOpciones($pregunta->id);
             $salidaOpciones = [
+                "id" => $pregunta->id,
                 "contenido" => $pregunta->contenido,
                 "tipo" => $pregunta->tipo,
                 "opciones" => $opciones

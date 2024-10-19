@@ -15,6 +15,7 @@ class PruebaController extends Controller{
         if ($condicion['salida']){
             $preguntas=$preguntaController->obtenerPreguntas($id);
             return response()->json([
+                "id" => $id,
                 "instrucciones" => $condicion['instrucciones'],
                 "preguntas" => $preguntas
             ],200);
