@@ -45,6 +45,32 @@ class UsuarioController extends Controller{
     public function existeUsuario(string $email){
         return Usuario::where('email',$email)->first();
     }
+    public function existe(Request $request){
+        if ($this->existeUsuario($request->input("email"))){
+            return response()->json([
+                "salida" => true
+            ],200);
+        }else{
+            return response()->json([
+                "salida" => false,
+                "mensaje" => "El correo no existe"
+            ],200);
+        }
+    }
+
+    public function eliminar($id){
+        $mensaje = $this->eliminarUsuario($id);
+        return response()->json([
+            "mensaje" => $mensaje
+        ],200);
+    }
+
+    public function eliminarUsuario($id){
+        $usuario = Usuario::find($id);
+        $usuario->estaEliminado = 1;
+        $usuario->save();
+        return "El usuario fue eliminado exitosamente";
+    }
 
     public function obtenerUsuarios(){
         $usuario = Usuario::all();

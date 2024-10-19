@@ -16,11 +16,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-$router->post('/signup', 'UsuarioController@signup');
-$router->post('/login', 'UsuarioController@login');
-$router->get('/roles', 'RolController@index');
-$router->post('/roles', 'RolController@store');
-$router->post('/usuario/crear', 'Usuario\UsuarioController@ingresarUsuario');
-$router->get('/usuarios/obtener', 'Usuario\UsuarioController@obtenerUsuarios');
 
 $router->get("/prueba/obtener/{id}","Prueba\PruebaController@obtenerPrueba");
+
+$router->group(['prefix' => 'usuario'], function () use ($router) {
+    $router->post('/registrar', 'Usuario\UsuarioController@ingresarUsuario');
+    $router->post('/existe', 'Usuario\UsuarioController@existe');
+    $router->delete('/eliminar/{id}', 'Usuario\UsuarioController@eliminar');
+});
