@@ -62,6 +62,8 @@ $app->singleton(
 $app->configure('app');
 $app->configure('database');
 $app->register(Illuminate\Database\DatabaseServiceProvider::class);
+$app->register(Illuminate\Routing\RoutingServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------

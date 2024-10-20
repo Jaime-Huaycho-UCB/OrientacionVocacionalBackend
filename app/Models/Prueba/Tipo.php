@@ -12,6 +12,8 @@ class Tipo extends Model{
     public $timestamps = false;
     protected $table = 'TIPO';
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'tipo'
     ];

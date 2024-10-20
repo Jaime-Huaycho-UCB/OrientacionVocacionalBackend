@@ -15,7 +15,7 @@ class Prueba extends Model
 
     public $timestamps = false;
     protected $table = 'PRUEBA';
-
+    protected $primaryKey = 'id';
     protected $fillable = [
         'instrucciones' 
     ];

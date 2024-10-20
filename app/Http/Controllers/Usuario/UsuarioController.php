@@ -41,9 +41,36 @@ class UsuarioController extends Controller{
             ]);
         }
     } 
+
+    public function usuarioValido(Request $request){
+        $email = $request->email;
+        $contrasena = $request->contrasena;
+        if ($this->existeUsuario($email)){
+            $usuario = Usuario::where('email','=',$email)->first();
+            if (Hash::check($request->input("contrasena"),$usuario->contrasena)){
+                return response()->json([
+                    "salida" => true
+                ],200);
+            }else{
+                return response()->json([
+                    "salida" => false,
+                    "mensaje" => "Contrasena incorrecta del usuario"
+                ],400);
+            }
+        }else{  
+            return response()->json([
+                "salida" => false,
+                "mensaje" => "EL correo no existe"
+            ],404);
+        }
+    }
     
     public function existeUsuario(string $email){
-        return Usuario::where('email',$email)->first();
+        $respuesta = Usuario::where('email','=',$email)->first();
+        if ($respuesta && $respuesta->estaEliminado==0){
+            return true;
+        }
+        return false;
     }
     public function existe(Request $request){
         if ($this->existeUsuario($request->input("email"))){
@@ -73,9 +100,33 @@ class UsuarioController extends Controller{
     }
 
     public function obtenerUsuarios(){
-        $usuario = Usuario::all();
-        if ($usuario){
-            return response()->json($usuario,200);
+        $usuarios = Usuario::all();
+        if ($usuarios->isNotEmpty()) {
+            return response()->json($usuarios, 200);
+        } else {
+            return response()->json([
+                'mensaje' => 'No se encontraron usuarios'
+            ], 404);
+        }
+    }
+    public function obtenerUsuariosHabilitados(){
+        $usuarios = DB::table('USUARIO')->where('estaEliminado','=',0)->get();
+        if ($usuarios) {
+            return response()->json($usuarios, 200);
+        } else {
+            return response()->json([
+                'mensaje' => 'No se encontraron usuarios'
+            ], 404);
+        }
+    }
+    public function obtenerUsuariosInhabilitados(){
+        $usuarios = DB::table('USUARIO')->where('estaEliminado','=',1)->get();
+        if ($usuarios) {
+            return response()->json($usuarios, 200);
+        } else {
+            return response()->json([
+                'mensaje' => 'No se encontraron usuarios'
+            ], 404);
         }
     }
 }

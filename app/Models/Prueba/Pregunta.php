@@ -15,6 +15,7 @@ class Pregunta extends Model
 
     public $timestamps = false;
     protected $table = 'PREGUNTA';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'contenido','tipo','prueba' 

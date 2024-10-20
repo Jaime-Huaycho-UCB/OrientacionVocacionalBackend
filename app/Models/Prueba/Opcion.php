@@ -15,6 +15,7 @@ class Opcion extends Model
 
     public $timestamps = false;
     protected $table = 'OPCION';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'descripcion','inciso','pregunta' 

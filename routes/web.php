@@ -23,4 +23,18 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->post('/registrar', 'Usuario\UsuarioController@ingresarUsuario');
     $router->post('/existe', 'Usuario\UsuarioController@existe');
     $router->delete('/eliminar/{id}', 'Usuario\UsuarioController@eliminar');
+    $router->get('/obtener', 'Usuario\UsuarioController@obtenerUsuarios');
+    $router->get('/obtener/habilitados', 'Usuario\UsuarioController@obtenerUsuariosHabilitados');
+    $router->get('/obtener/inhabilitados', 'Usuario\UsuarioController@obtenerUsuariosInhabilitados');
 });
+
+$router->group(['prefix' => 'rol'], function () use ($router) {
+    $router->post('/ingresar', 'Usuario\RolController@ingresarRol');
+    $router->get('/obtener','Usuario\RolController@obtenerRoles');
+});
+
+$router->group(['prefix' => 'prueba'], function () use ($router){
+    $router->get("/obtener/{id}","Prueba\PruebaController@obtenerPrueba");
+    $router->post('/ingresar','Prueba\PruebaController@ingresarPrueba');
+});
+

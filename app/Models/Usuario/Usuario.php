@@ -19,7 +19,7 @@ class Usuario extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'nombres', 'apellidos', 'email', 'contrasena', 'rol','estaEliminado'
+        'nombres', 'apellidos', 'email', 'contrasena', 'rol', 'estaEliminado'
     ];
 
     protected $hidden = [
