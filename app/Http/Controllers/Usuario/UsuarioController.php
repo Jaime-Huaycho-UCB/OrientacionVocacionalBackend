@@ -24,7 +24,7 @@ class UsuarioController extends Controller{
                 $usuario->nombres = $request->input("nombres");
                 $usuario->apellidos = $request->input("apellidos");
                 $usuario->email = $request->input("email");
-                $usuario->contrasena = $request->input("contrasena");
+                $usuario->contrasena = Hash::make($request->input("contrasena"));
                 $usuario->rol=$respuesta->id;
                 $usuario->save();
                 return response()->json([
@@ -47,7 +47,7 @@ class UsuarioController extends Controller{
         $contrasena = $request->contrasena;
         if ($this->existeUsuario($email)){
             $usuario = Usuario::where('email','=',$email)->first();
-            if (Hash::check($request->input("contrasena"),$usuario->contrasena)){
+            if (Hash::check($contrasena,$usuario->contrasena)){
                 return response()->json([
                     "salida" => true
                 ],200);
@@ -66,7 +66,8 @@ class UsuarioController extends Controller{
     }
     
     public function existeUsuario(string $email){
-        $respuesta = Usuario::where('email','=',$email)->first();
+        $respuesta = Usuario::where('email','=',$email)
+                            ->first();
         if ($respuesta && $respuesta->estaEliminado==0){
             return true;
         }

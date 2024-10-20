@@ -26,6 +26,7 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->get('/obtener', 'Usuario\UsuarioController@obtenerUsuarios');
     $router->get('/obtener/habilitados', 'Usuario\UsuarioController@obtenerUsuariosHabilitados');
     $router->get('/obtener/inhabilitados', 'Usuario\UsuarioController@obtenerUsuariosInhabilitados');
+    $router->post('/validar','Usuario\UsuarioController@usuarioValido');
 });
 
 $router->group(['prefix' => 'rol'], function () use ($router) {

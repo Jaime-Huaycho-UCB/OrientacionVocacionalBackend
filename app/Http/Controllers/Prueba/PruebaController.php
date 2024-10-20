@@ -43,7 +43,7 @@ class PruebaController extends Controller{
     }
 
     public function existePrueba(int $id){
-        $respuesta = DB::table("PRUEBA")->select("id","instrucciones")->where("id","=",$id)->first();
+        $respuesta = Prueba::find($id);
         if ($respuesta){
             return [
                 "salida" => true,
