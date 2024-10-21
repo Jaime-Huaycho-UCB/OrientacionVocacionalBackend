@@ -87,7 +87,11 @@ class UsuarioController extends Controller{
         $usuario->estaEliminado = 1;
         $usuario->save();
         $respuestaController = new RespuestaController();
+        $resultadoController = new ResultadoController();
+        $interesUsuarioController = new InteresesUsuarioController();
+        $resultadoController->eliminarResultado($id);
         $respuestaController->eliminarRespuesta($id);
+        $interesUsuarioController->eliminarInteresesUsuario($id);
         return "El usuario fue eliminado exitosamente";
     }
 
