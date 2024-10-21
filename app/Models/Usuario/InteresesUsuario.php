@@ -15,8 +15,9 @@ class InteresesUsuario extends Model
 
     public $timestamps = false;
     protected $table = 'INTERESES_USUARIO';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'usuario','interes'
+        'usuario','interes','estaEliminado'
     ];
 }

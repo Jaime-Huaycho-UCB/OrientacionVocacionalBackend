@@ -15,6 +15,7 @@ class Rol extends Model
 
     public $timestamps = false;
     protected $table = 'ROL';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'nombre'

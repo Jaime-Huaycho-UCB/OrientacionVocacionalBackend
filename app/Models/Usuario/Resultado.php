@@ -15,6 +15,7 @@ class Resultado extends Model
 
     public $timestamps = false;
     protected $table = 'RESULTADO';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'resumenInteres','RazonamientoVerbal','RazonamientoNumerico','espacial','clerical','sugerenciaVocacional','usuario'

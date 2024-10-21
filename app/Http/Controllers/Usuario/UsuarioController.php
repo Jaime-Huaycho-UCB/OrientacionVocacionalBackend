@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Usuario;
 
+use App\Http\Controllers\Prueba\OpcionController;
+use App\Http\Controllers\Prueba\PreguntaController;
+use App\Http\Controllers\Prueba\PruebaController;
 use App\Models\Usuario\Usuario;
 use App\Http\Controllers\Controller;
 use App\Models\Usuario\Rol;
@@ -9,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Usuario\RolController;
+use App\Models\Usuario\Respuesta;
 use Illuminate\Support\Facades\DB;
 
 
@@ -16,27 +20,23 @@ class UsuarioController extends Controller{
     public function ingresarUsuario(Request $request){
         $rolController = new RolController();
         $usuario = new Usuario();
-        $rol = $request->input("rol");
         $email = $request->input("email");
         if (!($this->existeUsuario($email))){
-            $respuesta=$rolController->existeRol($rol);
-            if ($respuesta){
-                $usuario->nombres = $request->input("nombres");
-                $usuario->apellidos = $request->input("apellidos");
-                $usuario->email = $request->input("email");
-                $usuario->contrasena = Hash::make($request->input("contrasena"));
-                $usuario->rol=$respuesta->id;
-                $usuario->save();
-                return response()->json([
-                    "mensaje" => "usuario ingresado exitosamente"
-                ],200);
-            }else{
-                return response()->json([
-                    "mensaje" => "El rol ingresado es invalido"
-                ],500);
-            }
+            $respuesta=$rolController->existeRol("Usuario");
+            $usuario->nombres = $request->input("nombres");
+            $usuario->apellidos = $request->input("apellidos");
+            $usuario->email = $request->input("email");
+            $usuario->contrasena = Hash::make($request->input("contrasena"));
+            $usuario->rol=$respuesta->id;
+            $usuario->save();
+            return response()->json([
+                "salida" => true,
+                "mensaje" => "usuario ingresado exitosamente",
+                "usuario" => $usuario->id
+            ],200);
         }else{
             return response()->json([
+                "salida" => false,
                 "mensaje" => "El usuario ya existe"
             ]);
         }
@@ -49,7 +49,8 @@ class UsuarioController extends Controller{
             $usuario = Usuario::where('email','=',$email)->first();
             if (Hash::check($contrasena,$usuario->contrasena)){
                 return response()->json([
-                    "salida" => true
+                    "salida" => true,
+                    "mensaje" => "Usuario y contrasena validos"
                 ],200);
             }else{
                 return response()->json([
@@ -73,18 +74,6 @@ class UsuarioController extends Controller{
         }
         return false;
     }
-    public function existe(Request $request){
-        if ($this->existeUsuario($request->input("email"))){
-            return response()->json([
-                "salida" => true
-            ],200);
-        }else{
-            return response()->json([
-                "salida" => false,
-                "mensaje" => "El correo no existe"
-            ],200);
-        }
-    }
 
     public function eliminar($id){
         $mensaje = $this->eliminarUsuario($id);
@@ -97,11 +86,13 @@ class UsuarioController extends Controller{
         $usuario = Usuario::find($id);
         $usuario->estaEliminado = 1;
         $usuario->save();
+        $respuestaController = new RespuestaController();
+        $respuestaController->eliminarRespuesta($id);
         return "El usuario fue eliminado exitosamente";
     }
 
     public function obtenerUsuarios(){
-        $usuarios = Usuario::all();
+        $usuarios = Usuario::where('estaEliminado','=',0)->get();
         if ($usuarios->isNotEmpty()) {
             return response()->json($usuarios, 200);
         } else {
@@ -110,24 +101,37 @@ class UsuarioController extends Controller{
             ], 404);
         }
     }
-    public function obtenerUsuariosHabilitados(){
-        $usuarios = DB::table('USUARIO')->where('estaEliminado','=',0)->get();
-        if ($usuarios) {
-            return response()->json($usuarios, 200);
-        } else {
-            return response()->json([
-                'mensaje' => 'No se encontraron usuarios'
-            ], 404);
+
+    public function obtenerDatosUsuario(int $idUsuario){
+        $pruebaController = new PruebaController();
+        $interesController = new InteresController();
+        $respuestaController = new RespuestaController();
+        $preguntaController = new PreguntaController();
+        $opcionController = new OpcionController();
+        $usuario = Usuario::find($idUsuario);
+        $arraySalida = array();
+        $respuestas = $respuestaController->obtenerRespuesta($idUsuario);
+        $intereses = $interesController->obtenerInteresesUsuarioDatos($idUsuario);
+        $idPrueba = 0;
+        foreach ($respuestas as $opcion){
+            $opcionData = $opcionController->obtenerOpcion($opcion['opcion']);
+            $pregunta = $preguntaController->obtenerPregunta($opcionData['pregunta']);
+            $prueba = $pregunta['prueba'];
+            $salidaPreguntaRespuesta = [
+                $pregunta,
+                $opcionData
+            ];
+            array_push($arraySalida,$salidaPreguntaRespuesta);
         }
-    }
-    public function obtenerUsuariosInhabilitados(){
-        $usuarios = DB::table('USUARIO')->where('estaEliminado','=',1)->get();
-        if ($usuarios) {
-            return response()->json($usuarios, 200);
-        } else {
-            return response()->json([
-                'mensaje' => 'No se encontraron usuarios'
-            ], 404);
-        }
+        $
+        $salida = [
+            "nombres" => $usuario->nombres,
+            "apellidos" => $usuario->apellidos,
+            "email" => $usuario->email,
+            "prueba"
+            "intereses" => $intereses,
+            "preguntas" => $arraySalida
+        ];
+        return response()->json($salida,200);
     }
 }

@@ -29,6 +29,11 @@ class PruebaController extends Controller{
         }
     }
 
+    public function obtenerPruebaDatos(int $idPrueba){
+        $prueba = Prueba::find($idPrueba);
+        return $prueba;
+    }
+
     public function ingresarPrueba(Request $request){
         $instrucciones = $request->instrucciones;
         $prueba = new Prueba();

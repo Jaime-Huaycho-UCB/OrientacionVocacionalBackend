@@ -17,20 +17,80 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get("/prueba/obtener/{id}","Prueba\PruebaController@obtenerPrueba");
-
 $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->post('/registrar', 'Usuario\UsuarioController@ingresarUsuario');
-    $router->post('/existe', 'Usuario\UsuarioController@existe');
+    /*
+    Entrada: json
+    {
+        "nombres": "",
+        "apellidos": "",
+        "email": "",
+        "contrasena": ""
+    }
+    Salida:1
+    {
+        "salida" => true,
+        "mensaje" => "usuario ingresado exitosamente",
+        "usuario" => #
+    }
+    Salida:2
+    {   
+        "salida" => false,
+        "mensaje" => "El usuario ya existe"
+    }
+    */
     $router->delete('/eliminar/{id}', 'Usuario\UsuarioController@eliminar');
+    /*
+    Entrada: en url
+        int $id
+
+    Salida1:
+    {
+        "mensaje": "El usuario fue eliminado exitosamente"
+    }
+    */
     $router->get('/obtener', 'Usuario\UsuarioController@obtenerUsuarios');
-    $router->get('/obtener/habilitados', 'Usuario\UsuarioController@obtenerUsuariosHabilitados');
-    $router->get('/obtener/inhabilitados', 'Usuario\UsuarioController@obtenerUsuariosInhabilitados');
+    /*
+    Entrada: ninguno
+    Salida:1
+    {
+        {
+            "id": #
+            "nombres": "",
+            "apellidos": "",
+            "email": "",
+            "contrasena": ""
+            "rol": #
+            "estaEliminado": #
+        },
+        {
+            ...
+        },...
+    }
+    */
     $router->post('/validar','Usuario\UsuarioController@usuarioValido');
+    /*
+    Entrada: ninguno
+    Salida:1
+    {
+        "salida" => true,
+        "mensaje" => "Usuario y contrasena validos"
+    }
+    Salida:2
+    {
+        "salida" => false,
+        "mensaje" => "Contrasena incorrecta del usuario"
+    }
+    Salida:3
+    {
+        "salida" => false,
+        "mensaje" => "El correo no existe"
+    }
+    */
+    $router->get('obtener/datos/{idUsuario}','Usuario\UsuarioController@obtenerDatosUsuario');
 });
 
 $router->group(['prefix' => 'rol'], function () use ($router) {
-    $router->post('/ingresar', 'Usuario\RolController@ingresarRol');
     $router->get('/obtener','Usuario\RolController@obtenerRoles');
 });
 
@@ -38,4 +98,16 @@ $router->group(['prefix' => 'prueba'], function () use ($router){
     $router->get("/obtener/{id}","Prueba\PruebaController@obtenerPrueba");
     $router->post('/ingresar','Prueba\PruebaController@ingresarPrueba');
 });
+
+$router->group(['prefix' => 'interes'], function () use ($router){
+    $router->post('/ingresar','Usuario\InteresController@ingresarIntereses');
+    $router->post('/usuario/ingresar','Usuario\InteresController@ingresarInteresesUsuario');
+    $router->get('/obtener','Usuario\InteresController@obtenerIntereses');
+    $router->delete('/eliminar/{id}','Usuario\InteresController@eliminarInteres');
+});
+
+$router->group(['prefix' => 'respuesta'], function () use ($router){
+    $router->post('/ingresar','Usuario\RespuestaController@ingresarRespuestas');
+});
+
 

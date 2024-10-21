@@ -23,4 +23,9 @@ class OpcionController extends Controller{
             $modelOpcion->save();
         }
     }
+
+    public function obtenerOpcion(int $idOpcion){
+        $opcion = Opcion::find($idOpcion);
+        return $opcion;
+    }
 }

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class RolController extends Controller{
     public function existeRol(string $nombre){
-        return Rol::where('nombre',$nombre)->first();
+        return Rol::where('nombre','=',$nombre)->first();
     }
 
     public function obtenerRoles(){

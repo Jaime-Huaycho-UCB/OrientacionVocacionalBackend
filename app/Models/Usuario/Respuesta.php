@@ -9,15 +9,15 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Lumen\Auth\Authorizable;
 
-class Interes extends Model
+class Respuesta extends Model
 {
     use Authenticatable, Authorizable, HasFactory;
 
     public $timestamps = false;
-    protected $table = 'INTERES';
+    protected $table = 'RESPUESTA';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'descripcion'
+        'opcion','usuario','estaEliminado'
     ];
 }

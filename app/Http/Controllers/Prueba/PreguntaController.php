@@ -43,4 +43,9 @@ class PreguntaController extends Controller{
             $opcionController->ingresarOpciones($pregunta['opciones'],$idPregunta);
         }
     }
+
+    public function obtenerPregunta(int $idPregunta){
+        $pregunta = Pregunta::find($idPregunta);
+        return $pregunta;
+    }
 }
