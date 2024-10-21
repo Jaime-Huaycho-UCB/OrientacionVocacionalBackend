@@ -55,7 +55,7 @@ class InteresController extends Controller{
         $interesesUsuario = $interesesUsuarioController->obtenerInteresesUsuario($id) ;
         $salida = array();
         foreach ($interesesUsuario as $interesUsuario){
-            $interesesDescripcion = Interes::find($interesUsuario->$id);
+            $interesesDescripcion = Interes::find($interesUsuario['interes']);
             array_push($salida,$interesesDescripcion);
         }
         return $salida;

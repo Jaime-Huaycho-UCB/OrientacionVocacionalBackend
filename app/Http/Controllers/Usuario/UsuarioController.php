@@ -116,21 +116,24 @@ class UsuarioController extends Controller{
         foreach ($respuestas as $opcion){
             $opcionData = $opcionController->obtenerOpcion($opcion['opcion']);
             $pregunta = $preguntaController->obtenerPregunta($opcionData['pregunta']);
-            $prueba = $pregunta['prueba'];
+            $idPrueba = $pregunta['prueba'];
             $salidaPreguntaRespuesta = [
-                $pregunta,
-                $opcionData
+                "id" => $pregunta['id'],
+                "contenido" => $pregunta['contenido'],
+                "respuesta" => $opcionData
             ];
             array_push($arraySalida,$salidaPreguntaRespuesta);
         }
-        $
+        $prueba = $pruebaController->obtenerPruebaDatos($idPrueba);
         $salida = [
             "nombres" => $usuario->nombres,
             "apellidos" => $usuario->apellidos,
             "email" => $usuario->email,
-            "prueba"
             "intereses" => $intereses,
-            "preguntas" => $arraySalida
+            "prueba" => [
+                "instrucciones" => $prueba->instrucciones,
+                "preguntas" => $arraySalida
+            ]
         ];
         return response()->json($salida,200);
     }

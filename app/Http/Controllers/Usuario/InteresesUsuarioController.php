@@ -24,7 +24,7 @@ class InteresesUsuarioController extends Controller{
     }
 
     public function obtenerInteresesUsuario(int $id){
-        $interesesUsuario = InteresesUsuario::where('usuario','=',$id);
+        $interesesUsuario = InteresesUsuario::where('usuario','=',$id)->get();
         return $interesesUsuario;
     }
 }
