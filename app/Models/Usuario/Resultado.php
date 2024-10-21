@@ -18,6 +18,6 @@ class Resultado extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'resumenInteres','RazonamientoVerbal','RazonamientoNumerico','espacial','clerical','sugerenciaVocacional','usuario'
+        'resumenInteres','raonamientoVerbal','razonamientoNumerico','espacial','clerical','sugerenciaVocacional','usuario','estaEliminado'
     ];
 }

@@ -38,7 +38,7 @@ class UsuarioController extends Controller{
             return response()->json([
                 "salida" => false,
                 "mensaje" => "El usuario ya existe"
-            ]);
+            ],409);
         }
     } 
 
