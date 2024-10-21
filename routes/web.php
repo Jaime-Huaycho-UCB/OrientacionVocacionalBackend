@@ -90,10 +90,6 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->get('obtener/datos/{idUsuario}','Usuario\UsuarioController@obtenerDatosUsuario');
 });
 
-$router->group(['prefix' => 'rol'], function () use ($router) {
-    $router->get('/obtener','Usuario\RolController@obtenerRoles');
-});
-
 $router->group(['prefix' => 'prueba'], function () use ($router){
     $router->get("/obtener/{id}","Prueba\PruebaController@obtenerPrueba");
     $router->post('/ingresar','Prueba\PruebaController@ingresarPrueba');

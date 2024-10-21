@@ -92,7 +92,9 @@ class UsuarioController extends Controller{
     }
 
     public function obtenerUsuarios(){
-        $usuarios = Usuario::where('estaEliminado','=',0)->get();
+        $usuarios = Usuario::where('estaEliminado','=',0)
+                    ->where('rol','=',3)
+                    ->get();
         if ($usuarios->isNotEmpty()) {
             return response()->json($usuarios, 200);
         } else {
