@@ -45,8 +45,8 @@ class UsuarioController extends Controller{
     public function usuarioValido(Request $request){
         $email = $request->email;
         $contrasena = $request->contrasena;
-        if ($this->existeUsuario($email)){
-            $usuario = Usuario::where('email','=',$email)->first();
+        $usuario = Usuario::where('email','=',$email)->where('rol','=',2)->first();
+        if ($usuario){
             if (Hash::check($contrasena,$usuario->contrasena)){
                 return response()->json([
                     "salida" => true,
